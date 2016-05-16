@@ -1,0 +1,2980 @@
+<!DOCTYPE html>
+<html ng-app="nestlings">
+<head>
+<meta charset="ISO-8859-1">
+<meta content="nestlings, nestlings.com, www.nestlings.com, http://www.nestlings.com, http://nestlings.com, nestlings.in, www.nestlings.in, http://www.nestlings.in, http://nestlings.in, nestlings.net, www.nestlings.net, http://www.nestlings.net, http://nestlings.net, nestling, schools, school, student, students, university, universities, job, jobs, training, trainings, college, colleges, scholarship, scholarships, classified, classifieds, company, companies, intern, interns, internship, internships, alumni, alumnis, training, trainings, bank, banks, institution, institutions" name="keywords">
+<title>Nestlings</title>
+<link rel="icon" type="image/png" href="img/logo.png">
+<script src="js/angular.min.js"></script>
+<script src="js/common.js"></script>
+
+<link rel="stylesheet" href="css/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="css/index-style.css">
+<link href='http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300ita‌​lic,400italic,500,500italic,700,700italic,900italic,900' rel='stylesheet' type='text/css'>
+	
+  <script src="js/jquery-1.10.2.js"></script>
+  <script src="js/jquery-ui.js"></script>
+  <script src="js/moment.js"></script>
+  <script src="js/combodate.js"></script>
+<style>
+
+</style>
+</head>
+<body ng-controller = "logincontrol">
+
+<div id="header">
+	<img src="img/LoginPage_Logo.png" style="display:block;margin-left:auto;margin-right:auto;margin-top:10%">
+	<div style="color:white;font-family: roboto-regular;font-size:16px;text-align:center;margin-top:20px;">You're visitor no <img style="vertical-align:middle" src="http://simplehitcounter.com/hit.php?uid=2069419&f=16777215&b=0"></div>
+	<div id="register_dialog" style="display:none">
+		<form name="registerForm1" ng-submit="register(registerForm1.$valid)" style="padding: 10px;">
+			<div class = "registerHead registerText" style="">I am registering as a </div>
+			<div style="display:table;width:100%">
+				<div style="display:table-cell;width:15%;vertical-align:middle">		
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle">
+					<img class = registerIcon src="img/student_on.png" id="student_image" onclick="changeImage('0')" style="">
+				</div>
+				<div style="display:table-cell;width:5%;vertical-align:middle">		
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle">
+					<img class = registerIcon src="img/faculty_off.png" id="faculty_image" onclick="changeImage('1')" style="">
+				</div>
+				<div style="display:table-cell;width:5%;vertical-align:middle">		
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle">
+					<img class = registerIcon src="img/alumni_off.png" id="alumni_image" onclick="changeImage('2')"  style="">
+				</div>
+				<div style="display:table-cell;width:15%;vertical-align:middle">		
+				</div>	
+			</div>
+			<div style="display:table;width:100%;margin-top:10px;">
+				<div style="display:table-cell;width:100%;vertical-align:middle">	
+					<p style = "color:red;margin: 3px;">{{userExistError}}</p>		
+					<input class = "registerInput" type="text" ng-model="emailID" style="width:96%;" placeholder="Email ID *" pattern="^[a-zA-Z0-9_\-.]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-.]+$" title="Please enter valid mailID" required>
+				</div>
+				<!-- <div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					OR
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input type="text" ng-model="number" style="width:90%;height:20px;background-color:white;border: 1px solid lightgray" placeholder="Mobile No" required>	
+				</div> -->
+			</div>		
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="password" ng-model="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" style="width:90%;" placeholder="Password *" required>
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input type="password"  class = "registerInput" ng-model="confirmPassword" name="confirmPassword" data-ng-match="password" data-password-verify="password" style="width:90%;" placeholder="Confirm Password *" required>
+					<div style="color:red; margin-bottom:-15px;" ng-show="registerForm1.confirmPassword.$error.passwordVerify">
+        				Passwords don't match    
+       				</div>	
+				</div>
+			</div>		
+			<div style="margin-top:20px;">
+				<input type="checkbox" required style="text-align:left;width:20px;vertical-align:middle;"/><a style="" class = "registerText" >I accept the Terms & Condition</a><br>
+			</div>		
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:70%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+				</div>			
+				<div style="display:table-cell;width:30%;vertical-align:middle;font-family: roboto-regular;">
+					<button class="registerButton"  ng-click= "register()" >Register</button>
+				</div>		
+			</div>	
+		</form>
+	</div>
+	
+	<!-- Confirmation alert -->
+	<div id="confirm_dialog" style="display:none">
+		<div style="text-align:center;color:black;font-family: roboto-regular;margin:10px;;font-size: 15px;">Do you want to update your profile?</div>
+	
+		<div style="display:table;width:100%;margin-top:40px;">
+			<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+				<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" onclick="skip()">Skip</button>
+			</div>	
+			<div style="display:table-cell;width:20%;vertical-align:middle;font-family: roboto-regular;">
+			</div>			
+			<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+				<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" onclick="next()">Next</button>
+			</div>		
+		</div>	
+	</div>
+	
+	<div id="basic_details_dialog" style="display:none">
+		<form name="profileRegistration" ng-submit="profileregister(profileRegistration.$valid)">
+			<div style="text-align:center;color:black;font-family: roboto-regular;margin:10px;font-size: 15px;">Please fill in your details</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" ng-model="firstName" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed with the length 2 or more" style="width:90%;" placeholder="First Name *" required>
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model="lastName" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed with the length 2 or more" style="width:90%;" placeholder="Last Name *" required>	
+				</div>
+			</div>		
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" ng-model="street" style="width:90%;" placeholder="Street" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput"  type="text" ng-model="city" style="width:90%;" placeholder="City" >	
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" ng-model="state" style="width:90%;" placeholder="State" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model="zip" style="width:90%;" placeholder="Zip" >					
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" ng-model="country" style="width:90%;" placeholder="Country" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model="mobileNumber" style="width:90%;" placeholder="Mobile Number" >	
+				</div>
+			</div>
+			
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:60%;vertical-align:middle">	
+					<div style="display:table-cell;width:100%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+						Date of birth
+					</div>	
+					<input class = "registerInput" type="text" id="date" data-format="DD-MM-YYYY" data-template="D MMM YYYY" name="date" >
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle;">
+					<img src="img/male_on.png" id="male_image" onclick="changeGenderImage('0')" width="50px" height="70px" style="cursor:pointer;margin-right:20px">
+					<img src="img/female_off.png" id="female_image" onclick="changeGenderImage('1')" width="50px" height="70px" style="cursor:pointer;">
+				</div>			
+			</div>
+			
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+				</div>	
+				<div style="display:table-cell;width:20%;vertical-align:middle;font-family: roboto-regular;">
+				</div>			
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" ng-click="profileregister()">Next</button>
+				</div>
+			</div>	
+		</form>
+	</div>
+	
+	<div id="student_college_dialog" style="display:none">
+		<form name="collegeDetails" ng-submit="collegedetails(collegeDetails.$valid)">
+			<div style="text-align:center;color:black;font-family: roboto-regular;margin:10px;font-size: 15px;">School/College/University details</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model = "schoolName" placeholder="School/College Name *"  pattern="^[A-Za-z\s]{3,}[\.]{0,1}[A-Za-z\s]{0,}$" style="" title="Only Alphabets,Space,. are allowed with length 3 to 30 characters" required>
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" ng-model = "collegecourse" placeholder="Course" >	
+				</div>
+			</div>	
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+					Start Date
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+					End Date	
+				</div>
+			</div>
+			<div style="display:table;width:100%;">
+				<div style="display:table-cell;width:60%;vertical-align:middle">
+							
+					<input class = "registerInput" type="text" id="startcollegedate" data-format="DD-MM-YYYY" data-template="D MMM YYYY" name="startcollegedate" >
+				</div>					
+				<div style="display:table-cell;width:40%;vertical-align:middle">
+					
+					<input class = "registerInput" type="text" id="endcollegedate" data-format="DD-MM-YYYY" data-template="D MMM YYYY" name="endcollegedate" >
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput"  type="number" step="any"style="" placeholder="GPA *" ng-model = "gpa"  pattern="^[0]|[0-3]\.(\d?\d?)|[4].[0]$" title="Please Enter The GPA" value="" required>
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" placeholder="Street" ng-model = "collegestreet" value="" >		
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput"  type="text" style="" placeholder="City" ng-model = "collegecity" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" placeholder="State" ng-model = "collegestate" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >	
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" style="" placeholder="Zip" ng-model = "collegezip"  value="" pattern="^[0-9]{5,6}" title="Please enter valid zip code only" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput"  type="text" style=""  placeholder="Country" ng-model = "collegecountry" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >	
+				</div>
+			</div>
+			
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" onclick="skip()">Skip</button>
+				</div>	
+				<div style="display:table-cell;width:20%;vertical-align:middle;font-family: roboto-regular;">
+				</div>			
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" ng-click="collegedetails()">Next</button>
+				</div>
+			</div>	
+		</form>
+	</div>
+	<div id="faculty_basic_dialog" style="display:none">
+		<form name="facultybasicDetail" ng-submit="facultybasicdetail(facultybasicDetail.$valid)">
+			<div style="text-align:center;color:black;font-family: roboto-regular;margin:10px;;font-size: 15px;">Faculty</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput"  type="text" ng-model = "summary" placeholder="summary"  style="" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" ng-model = "eduQualification" placeholder="Education Qualification" >	
+				</div>
+			</div>	
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="number" ng-model = "uniAttended" placeholder="Universities Attended"   style="" >
+			
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					
+				<select id="researchAffiliation"  class = "selectOption" ng-model="researchAffiliation" data-role="slider">
+		 				<option value="">Select One</option>
+						<option value="true">Yes</option>
+					    <option value="false">No</option>
+						
+					</select> 
+					</div>
+			</div>	
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<select id="researchAssistance"  class = "selectOption" ng-model="researchAssistance" data-role="slider">
+						 		<option value="">Select One</option>
+								<option value="true">Yes</option>
+								<option value="false">No</option>
+							</select>
+					</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					
+					<select id="teachingAssistance"  class = "selectOption" ng-model="teachingAssistance" data-role="slider">
+						 		<option value="">Select One</option>
+								<option value="true">Yes</option>
+								<option value="false">No</option>
+							</select>
+							</div>
+			</div>	
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput"  type="text" ng-model = "experience" placeholder="Experience"   style="" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" ng-model = "projects" placeholder="Projects" >	
+				</div>
+			</div>	
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model = "specializations" placeholder="Specializations"   style="">
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<select id="mentor"  class = "selectOption" ng-model="mentor">
+						 		<option value="">Select One</option>
+								<option value="true">Yes</option>
+								<option value="false">No</option>
+							</select>
+							</div>
+			</div>	
+						
+			
+			
+			
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" onclick="skip()">Skip</button>
+				</div>	
+				<div style="display:table-cell;width:20%;vertical-align:middle;font-family: roboto-regular;">
+				</div>			
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" ng-click="facultybasicdetail()">Next</button>
+				</div>
+			</div>	
+		</form>
+	</div>
+		<div id="alumni_college_dialog" style="display:none">
+		<form name="alumnicollegeDetails" ng-submit="alumnicollegedetails(alumnicollegeDetails.$valid)">
+			<div style="text-align:center;color:black;font-family: roboto-regular;margin:10px;font-size: 15px;">Alumni College details</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput"  type="text" ng-model = "alumnicollegeName" placeholder="College Name *"  pattern="^[A-Za-z\s]{3,}[\.]{0,1}[A-Za-z\s]{0,}$" style="" title="Only Alphabets,Space,. are allowed with length 3 to 30 characters" required>
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" ng-model = "alumnicollegecourse" placeholder="Course" >	
+				</div>
+			</div>	
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+					Start Date
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+					End Date	
+				</div>
+			</div>
+			<div style="display:table;width:100%;">
+				<div style="display:table-cell;width:60%;vertical-align:middle">
+							
+					<input class = "registerInput" type="text" id="alumnistartcollegedate" data-format="DD-MM-YYYY" data-template="D MMM YYYY" name="alumnistartcollegedate" >
+				</div>					
+				<div style="display:table-cell;width:40%;vertical-align:middle">
+					
+					<input class = "registerInput" type="text" id="alumniendcollegedate" data-format="DD-MM-YYYY" data-template="D MMM YYYY" name="alumniendcollegedate" >
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" style="" placeholder="Grade" ng-model = "alumnicollegewebsite"  value="" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" placeholder="Street" ng-model = "alumnicollegestreet" value="" >		
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" style="" placeholder="City" ng-model = "alumnicollegecity" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" placeholder="State" ng-model = "alumnicollegestate" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >	
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" style="" placeholder="Zip" ng-model = "alumnicollegezip"  value="" pattern="^[0-9]{5,6}" title="Please enter valid zip code only" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style=""  placeholder="Country" ng-model = "alumnicollegecountry" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >	
+				</div>
+			</div>
+			
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" onclick="skip()">Skip</button>
+				</div>	
+				<div style="display:table-cell;width:20%;vertical-align:middle;font-family: roboto-regular;">
+				</div>			
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" ng-click="alumnicollegedetails()">Next</button>
+				</div>
+			</div>	
+		</form>
+	</div>
+	
+	<div id="student_work_dialog" style="display:none">
+		<form name="studentWorkDetails" ng-submit="studentworkdetails(studentWorkDetails.$valid)">
+			<div style="text-align:center;color:black;font-family: roboto-regular;margin:10px;font-size: 15px;">Work details</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model = "workcompanyName" placeholder="Company Name *"  pattern="^[A-Za-z\s]{3,}[\.]{0,1}[A-Za-z\s]{0,}$" style="" title="Only Alphabets,Space,. are allowed with length 3 to 30 characters" required>
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" ng-model = "worktitle" placeholder="Title" >	
+				</div>
+			</div>	
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="width:96% !important;" placeholder="Description" ng-model = "description" value="" >		
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+					Start Date
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+					End Date	
+				</div>
+			</div>
+			<div style="display:table;width:100%;">
+				<div style="display:table-cell;width:60%;vertical-align:middle">
+							
+					<input class = "registerInput" type="text" id="startworkdate" data-format="DD-MM-YYYY" data-template="D MMM YYYY" name="startworkdate" >
+				</div>					
+				<div style="display:table-cell;width:40%;vertical-align:middle">
+					
+					<input  class = "registerInput" type="text" id="endworkdate" data-format="DD-MM-YYYY" data-template="D MMM YYYY" name="endworkdate" >
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" style="" placeholder="Website" ng-model = "workwebsite"  value="" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" placeholder="Street" ng-model = "workstreet" value="" >		
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" style="" placeholder="City" ng-model = "workcity" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" placeholder="State" ng-model = "workstate" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >	
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" style="" placeholder="Zip" ng-model = "workzip"  value="" pattern="^[0-9]{5,6}" title="Please enter valid zip code only" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style=""  placeholder="Country" ng-model = "workcountry" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >	
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" onclick="skip()">Skip</button>
+				</div>	
+				<div style="display:table-cell;width:20%;vertical-align:middle;font-family: roboto-regular;">
+				</div>			
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" ng-click="studentworkdetails()">Next</button>
+				</div>
+			</div>	
+		</form>
+	</div>
+	<div id="faculty_work_dialog" style="display:none">
+		<form name="facultyWorkDetails" ng-submit="facultyworkdetails(facultyWorkDetails.$valid)">
+			<div style="text-align:center;color:black;font-family: roboto-regular;margin:10px;font-size: 15px;"> Faculty Work details</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model = "facultycollegeName" placeholder="Company Name *"  pattern="^[A-Za-z\s]{3,}[\.]{0,1}[A-Za-z\s]{0,}$" style="" title="Only Alphabets,Space,. are allowed with length 3 to 30 characters" required>
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" ng-model = "facultytitle" placeholder="Title" >	
+				</div>
+			</div>	
+			
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+					Start Date
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+					End Date	
+				</div>
+			</div>
+			<div style="display:table;width:100%;">
+				<div style="display:table-cell;width:60%;vertical-align:middle">
+							
+					<input class = "registerInput" type="text" id="facultystartworkdate" data-format="DD-MM-YYYY" data-template="D MMM YYYY" name="facultystartworkdate" >
+				</div>					
+				<div style="display:table-cell;width:40%;vertical-align:middle">
+					
+					<input class = "registerInput" type="text" id="facultyendworkdate" data-format="DD-MM-YYYY" data-template="D MMM YYYY" name="facultyendworkdate" >
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" style="" placeholder="Website" ng-model = "facultywebsite"  value="" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" placeholder="Street" ng-model = "facultystreet" value="" >		
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" style="" placeholder="City" ng-model = "facultycity" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" placeholder="State" ng-model = "facultystate" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >	
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" style="" placeholder="Zip" ng-model = "facultyzip"  value="" pattern="^[0-9]{5,6}" title="Please enter valid zip code only" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style=""  placeholder="Country" ng-model = "facultycountry" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >	
+				</div>
+			</div>
+			
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" onclick="skip()">Skip</button>
+				</div>	
+				<div style="display:table-cell;width:20%;vertical-align:middle;font-family: roboto-regular;">
+				</div>			
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" ng-click="facultyworkdetails()">Next</button>
+				</div>
+			</div>	
+		</form>
+	</div>
+	
+	<div id="alumni_work_dialog" style="display:none">
+		<form name="alumniWorkDetails" ng-submit="alumniworkdetails(alumniWorkDetails.$valid)">
+			<div style="text-align:center;color:black;font-family: roboto-regular;margin:10px;font-size: 15px;"> Alumni Work details</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model = "alumniworkcompanyName" placeholder="Company Name *"  pattern="^[A-Za-z\s]{3,}[\.]{0,1}[A-Za-z\s]{0,}$" style="" title="Only Alphabets,Space,. are allowed with length 3 to 30 characters" required>
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" ng-model = "alumniworktitle" placeholder="Title" >	
+				</div>
+			</div>	
+			
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+					Start Date
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+					End Date	
+				</div>
+			</div>
+			<div style="display:table;width:100%;">
+				<div style="display:table-cell;width:60%;vertical-align:middle">
+							
+					<input class = "registerInput" type="text" id="alumnistartworkdate" data-format="DD-MM-YYYY" data-template="D MMM YYYY" name="alumnistartworkdate" >
+				</div>					
+				<div style="display:table-cell;width:40%;vertical-align:middle">
+					
+					<input class = "registerInput" type="text" id="alumniendworkdate" data-format="DD-MM-YYYY" data-template="D MMM YYYY" name="alumniendworkdate" >
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput"  type="text" style="" placeholder="Website" ng-model = "alumniworkwebsite"  value="" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" placeholder="Street" ng-model = "alumniworkstreet" value="" >		
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" style="" placeholder="City" ng-model = "alumniworkcity" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" placeholder="State" ng-model = "alumniworkstate" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >	
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" style="" placeholder="Zip" ng-model = "alumniworkzip"  value="" pattern="^[0-9]{5,6}" title="Please enter valid zip code only" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput"  type="text" style=""  placeholder="Country" ng-model = "alumniworkcountry" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >	
+				</div>
+			</div>
+			
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" onclick="skip()">Skip</button>
+				</div>	
+				<div style="display:table-cell;width:20%;vertical-align:middle;font-family: roboto-regular;">
+				</div>			
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" ng-click="alumniworkdetails()">Next</button>
+				</div>
+			</div>	
+		</form>
+	</div>
+	
+	<div id="student_project_dialog" style="display:none">
+		<form name="studentProjectDetails" ng-submit="studentprojectdetails(studentProjectDetails.$valid)">
+			<div style="text-align:center;color:black;font-family: roboto-regular;margin:10px;font-size: 15px;">Project details</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model = "projectcompanyName" placeholder="Company Name *"  pattern="^[A-Za-z\s]{3,}[\.]{0,1}[A-Za-z\s]{0,}$" style="" title="Only Alphabets,Space,. are allowed with length 3 to 30 characters" required>
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" ng-model = "projecttitle" placeholder="Title" >	
+				</div>
+			</div>	
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" style="" placeholder="Project Description" ng-model = "studentProjprojectDescription"  value="" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput"  type="text" style="" placeholder="Project Name" ng-model = "studentProjprojectName" value="" >		
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" style="" placeholder="Responsibilities" ng-model = "studentProjresponsibilities"  value="" >
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+					Start Date
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+					End Date	
+				</div>
+			</div>
+			<div style="display:table;width:100%;">
+				<div style="display:table-cell;width:60%;vertical-align:middle">
+							
+					<input class = "registerInput" type="text" id="startprojectdate" data-format="DD-MM-YYYY" data-template="D MMM YYYY" name="startprojectdate" >
+				</div>					
+				<div style="display:table-cell;width:40%;vertical-align:middle">
+					
+					<input class = "registerInput" type="text" id="endprojectdate" data-format="DD-MM-YYYY" data-template="D MMM YYYY" name="endprojectdate" >
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" style="" placeholder="Website" ng-model = "projectwebsite"  value="" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" placeholder="Street" ng-model = "projectstreet" value="" >		
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" style="" placeholder="City" ng-model = "projectcity" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" placeholder="State" ng-model = "projectstate" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >	
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" style="" placeholder="Zip" ng-model = "projectzip"  value="" pattern="^[0-9]{5,6}" title="Please enter valid zip code only" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style=""  placeholder="Country" ng-model = "projectcountry" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >	
+				</div>
+			</div>
+			
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" onclick="skip()">Skip</button>
+				</div>	
+				<div style="display:table-cell;width:20%;vertical-align:middle;font-family: roboto-regular;">
+				</div>			
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" ng-click="studentprojectdetails()">Next</button>
+				</div>
+			</div>	
+		</form>
+	</div>
+	
+	<div id="faculty_project_dialog" style="display:none">
+		<form name="facultyProjectDetails" ng-submit="facultyprojectdetails(facultyProjectDetails.$valid)">
+			<div style="text-align:center;color:black;font-family: roboto-regular;margin:10px;font-size: 15px;"> Faculty Project details</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model = "facultytracompanyName" placeholder="Company Name *"  pattern="^[A-Za-z\s]{3,}[\.]{0,1}[A-Za-z\s]{0,}$" style="" title="Only Alphabets,Space,. are allowed with length 3 to 30 characters" required>
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" ng-model = "facultytratitle" placeholder="Title" >	
+				</div>
+			</div>	
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+					Start Date
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+					End Date	
+				</div>
+			</div>
+			<div style="display:table;width:100%;">
+				<div style="display:table-cell;width:60%;vertical-align:middle">
+							
+					<input class = "registerInput" type="text" id="facultystartprojectdate" data-format="DD-MM-YYYY" data-template="D MMM YYYY" name="facultystartprojectdate" >
+				</div>					
+				<div style="display:table-cell;width:40%;vertical-align:middle">
+					
+					<input class = "registerInput" type="text" id="facultyendprojectdate" data-format="DD-MM-YYYY" data-template="D MMM YYYY" name="facultyendprojectdate" >
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" style="" placeholder="Website" ng-model = "facultytrawebsite"  value="" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" placeholder="Street" ng-model = "facultytrastreet" value="" >		
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" style="" placeholder="City" ng-model = "facultytracity" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" placeholder="State" ng-model = "facultytrastate" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >	
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" style="" placeholder="Zip" ng-model = "facultytrazip"  value="" pattern="^[0-9]{5,6}" title="Please enter valid zip code only" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style=""  placeholder="Country" ng-model = "facultytracountry" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >	
+				</div>
+			</div>
+			
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" onclick="skip()">Skip</button>
+				</div>	
+				<div style="display:table-cell;width:20%;vertical-align:middle;font-family: roboto-regular;">
+				</div>			
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" ng-click="facultyprojectdetails()">Next</button>
+				</div>
+			</div>	
+		</form>
+	</div>
+	<div id="alumni_project_dialog" style="display:none">
+		<form name="alumniProjectDetails" ng-submit="alumniprojectdetails(alumniProjectDetails.$valid)">
+			<div style="text-align:center;color:black;font-family: roboto-regular;margin:10px;font-size: 15px;"> Alumni Project details</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model = "alumniprojectcompanyName" placeholder="Company Name *"  pattern="^[A-Za-z\s]{3,}[\.]{0,1}[A-Za-z\s]{0,}$" style="" title="Only Alphabets,Space,. are allowed with length 3 to 30 characters" required>
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" ng-model = "alumniprojecttitle" placeholder="Title" >	
+				</div>
+			</div>	
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+					Start Date
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+					End Date	
+				</div>
+			</div>
+			<div style="display:table;width:100%;">
+				<div style="display:table-cell;width:60%;vertical-align:middle">
+							
+					<input class = "registerInput" type="text" id="alumnistartprojectdate" data-format="DD-MM-YYYY" data-template="D MMM YYYY" name="alumnistartprojectdate" >
+				</div>					
+				<div style="display:table-cell;width:40%;vertical-align:middle">
+					
+					<input class = "registerInput" type="text" id="alumniendprojectdate" data-format="DD-MM-YYYY" data-template="D MMM YYYY" name="alumniendprojectdate" >
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" style="" placeholder="Website" ng-model = "alumniprojectwebsite"  value="" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" placeholder="Street" ng-model = "alumniprojectstreet" value="" >		
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" style="" placeholder="City" ng-model = "alumniprojectcity" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" placeholder="State" ng-model = "alumniprojectstate" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >	
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" style="" placeholder="Zip" ng-model = "alumniprojectzip"  value="" pattern="^[0-9]{5,6}" title="Please enter valid zip code only" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style=""  placeholder="Country" ng-model = "alumniprojectcountry" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >	
+				</div>
+			</div>
+			
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" onclick="skip()">Skip</button>
+				</div>	
+				<div style="display:table-cell;width:20%;vertical-align:middle;font-family: roboto-regular;">
+				</div>			
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" ng-click="alumniprojectdetails()">Next</button>
+				</div>
+			</div>	
+		</form>
+	</div>
+	
+	<div id="student_training_dialog" style="display:none">
+		<form name="studentTrainingDetails" ng-submit="studenttrainingdetails(studentTrainingDetails.$valid)">
+			<div style="text-align:center;color:black;font-family: roboto-regular;margin:10px;font-size: 15px;">Training details</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model = "trainingcompanyName" placeholder="Company Name *"  pattern="^[A-Za-z\s]{3,}[\.]{0,1}[A-Za-z\s]{0,}$" style="" title="Only Alphabets,Space,. are allowed with length 3 to 30 characters" required>
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" ng-model = "trainingcourse" placeholder="Course" >	
+				</div>
+			</div>	
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+					Start Date
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+					End Date	
+				</div>
+			</div>
+			<div style="display:table;width:100%;">
+				<div style="display:table-cell;width:60%;vertical-align:middle">
+							
+					<input class = "registerInput" type="text" id="starttrainingdate" data-format="DD-MM-YYYY" data-template="D MMM YYYY" name="starttrainingdate" >
+				</div>					
+				<div style="display:table-cell;width:40%;vertical-align:middle">
+					
+					<input class = "registerInput"  type="text" id="endtrainingdate" data-format="DD-MM-YYYY" data-template="D MMM YYYY" name="endtrainingdate" >
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" style="" placeholder="Website" ng-model = "trainingwebsite"  value="" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput"  type="text" style="" placeholder="Street" ng-model = "trainingstreet" value="" >		
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" style="" placeholder="City" ng-model = "trainingcity" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" placeholder="State" ng-model = "trainingstate" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >	
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" style="" placeholder="Zip" ng-model = "trainingzip"  value="" pattern="^[0-9]{5,6}" title="Please enter valid zip code only" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style=""  placeholder="Country" ng-model = "trainingcountry" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >	
+				</div>
+			</div>
+			
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" onclick="skip()">Skip</button>
+				</div>	
+				<div style="display:table-cell;width:20%;vertical-align:middle;font-family: roboto-regular;">
+				</div>			
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" ng-click="studenttrainingdetails()">Next</button>
+				</div>
+			</div>	
+		</form>
+	</div>
+	
+	<div id="fp_dialog" style="display:none">
+		<div style="text-align:center;color:black;font-family: roboto-bold;margin:20px">FORGOT YOUR PASSWORD?</div>
+		<div style="text-align:center;color:black;font-family: roboto-regular;margin:10px">Don't worry! Just fill in your email ID and we will help you reset your password</div>
+		<div style="display:table;width:100%;margin-top:10px;">
+			<div style="display:table-cell;width:40%;vertical-align:middle;text-align: center;">		
+				<input class = "registerInput" type="text" ng-model="resetEmailID" style="width: 80%;" placeholder="Email ID" required>
+			</div>
+			<!-- <div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+				OR
+			</div>
+			<div style="display:table-cell;width:40%;vertical-align:middle">	
+				<input class = "registerInput" type="text" ng-model="number" style="" placeholder="Mobile No" required>	
+			</div> -->
+		</div>		
+		<div style="display:table;width:100%;margin-top:20px;">
+			<div style="display:table-cell;width:70%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+			</div>			
+			<div style="display:table-cell;width:30%;vertical-align:middle;font-family: roboto-regular;">
+				<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" ng-click = "sendResetLink()" >Reset Password</button>
+			</div>		
+		</div>	
+	</div>	
+	<!-- for faculty details -->
+	<!-- <div id="confirm_1_dialog" style="display:none">
+		<div style="text-align:center;color:black;font-family: roboto-regular;margin:10px">Do you want to update your profile?</div>
+	
+		<div style="display:table;width:100%;margin-top:40px;">
+			<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+				<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" onclick="facskip()">Skip</button>
+			</div>	
+			<div style="display:table-cell;width:20%;vertical-align:middle;font-family: roboto-regular;">
+			</div>			
+			<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+				<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" onclick="facnext()">Next</button>
+			</div>		
+		</div>	
+	</div> -->
+	
+	<div id="special_register_dialog" style="display:none">
+	<form name="registerForm" ng-submit="register(registerForm.$valid)" style="top:0;">
+		<div class = "registerHead registerText" style="">I am registering as a </div>
+		<div style="display:table;width:100%">
+			<div style="display:table-cell;width:15%;vertical-align:middle">		
+			</div>
+			<div style="display:table-cell;width:20%;vertical-align:middle">
+				<img class = registerIcon src="img/college_reg_on.png" onclick="changeRegImage('3')" id="college_reg_image"  style="width: 125px;">
+			</div>
+			<div style="display:table-cell;width:5%;vertical-align:middle">		
+			</div>
+			<div style="display:table-cell;width:20%;vertical-align:middle">
+				<img  class = registerIcon src="img/company_reg_off.png" onclick="changeRegImage('4')" id="company_reg_image"  style="">
+			</div>
+			<div style="display:table-cell;width:5%;vertical-align:middle">		
+			</div>
+			<div style="display:table-cell;width:20%;vertical-align:middle">
+				<img class = registerIcon src="img/institution_reg_off.png" onclick="changeRegImage('5')" id="institution_reg_image"  style="">
+			</div>
+			<div style="display:table-cell;width:15%;vertical-align:middle">		
+			</div>	
+		</div>
+		<div style="display:table;width:100%">
+			<div style="display:table-cell;width:25%;vertical-align:middle">		
+			</div>
+			<div style="display:table-cell;width:20%;vertical-align:middle">
+				<img class = registerIcon src="img/bank_reg_off.png" onclick="changeRegImage('6')" id="bank_reg_image"  style="cursor:pointer;">
+			</div>
+			<div style="display:table-cell;width:5%;vertical-align:middle">		
+			</div>
+			<div style="display:table-cell;width:5%;vertical-align:middle">		
+			</div>
+			<div style="display:table-cell;width:20%;vertical-align:middle">
+				<img class = registerIcon src="img/scholarship_reg_off.png" onclick="changeRegImage('7')" id="scholarship_reg_image" style="cursor:pointer;">
+			</div>
+			<div style="display:table-cell;width:25%;vertical-align:middle">		
+			</div>	
+		</div>
+		<div style="display:table;width:100%;margin-top:10px;">
+				<div style="display:table-cell;width:100%;vertical-align:middle">	
+					<p style = "color:red;">{{invalidError}}</p>
+					<p style = "color:red;margin: 3px;">{{userExistError}}</p>		
+					<input class = "registerInput" type="text" ng-model="emailID" style="width:96%;" placeholder="Email ID *" pattern="^[a-zA-Z0-9_\-.]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-.]+$" title="Please enter valid mailID" required>
+				</div>
+				<!-- <div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					OR
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input type="text" ng-model="number" style="width:90%;height:20px;background-color:white;border: 1px solid lightgray" placeholder="Mobile No" required>	
+				</div> -->
+			</div>		
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="password" ng-model="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" style="width:90%;" placeholder="Password *" required>
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="password" ng-model="confirmPassword" name="confirmPassword" data-ng-match="password" data-password-verify="password" style="width:90%;" placeholder="Confirm Password *" required>
+					<div style="color:red; margin-bottom:-15px;" ng-show="registerForm.confirmPassword.$error.passwordVerify">
+        				Passwords don't match    
+       				</div>	
+				</div>
+			</div>		
+			<div style="">
+				<input type="checkbox" required style="text-align:left;width:20px;vertical-align:middle;"/><a style="font-family: roboto-regular">I accept the Terms & Condition</a><br>
+			</div>		
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:70%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+				</div>			
+				<div style="display:table-cell;width:30%;vertical-align:middle;font-family: roboto-regular;">
+					<button class="registerButton"  ng-click= "register()" >Register</button>
+				</div>		
+			</div>	
+			</form>
+	</div>
+	<div id="college_registration_1_dialog" style="display:none">
+		<form name="collegeRegistration1" ng-submit="collegeregistration1(collegeRegistration1.$valid)">
+			<div style="text-align:center;color:black;font-family: roboto-regular;margin:10px;font-size: 15px;">Please fill in your details</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" ng-model="collegeName" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed with the length 2 or more" style="" placeholder="School/College Name *" required>
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model="website" style="" placeholder="Website">	
+				</div>
+			</div>		
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" ng-model="certificatesOffered" style="" placeholder="Degrees/Certificates Offered" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model="coursesOffered" style="" placeholder="Courses Offered" >	
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" ng-model="programsOffered" style="" placeholder="Programs Offered" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model="regionalAccreditations" style="" placeholder="Regional Accreditations" >					
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="number" step="any" ng-model="gpa" pattern="^[0]|[0-3]\.(\d?\d?)|[4].[0]$" title="Please Enter Valid GPA" style="" placeholder="GPA *" required>
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" ng-model="tuitionFees" style="" placeholder="Tuition Fees" >
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+						
+				</div>
+			</div>
+			
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+				</div>	
+				<div style="display:table-cell;width:20%;vertical-align:middle;font-family: roboto-regular;">
+				</div>			
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" ng-click="collegeregistration1()">Next</button>
+				</div>
+			</div>	
+		</form>
+	</div>
+	<div id="college_registration_2_dialog" style="display:none">
+		<form name="collegeRegistration2" ng-submit="collegeregistration2(collegeRegistration2.$valid)">
+			<div style="text-align:center;color:black;font-family: roboto-regular;margin:10px;font-size: 15px;">Please fill in your details</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" ng-model="colGeneralPhoneNumber" pattern="^([0-9]{3})?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$" title="Please enter correct phone number" style="" placeholder="General Info Contact Number">
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model="colFinancialPhoneNumber" style="" placeholder="Financial Aid Contact Number">	
+				</div>
+			</div>		
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">
+					<input class = "registerInput" type="text"ng-model="colAdmissionsPhoneNumber" style="" placeholder="Admission Contact Number">		
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model="colEmailID" style="" placeholder="Email ID" ng-pattern="^[a-zA-Z0-9_\-.]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-.]+$" title="Please enter valid mailID">
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" placeholder="Street" ng-model = "colstreet">	
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" placeholder="City" ng-model = "colcity" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" placeholder="State" ng-model = "colstate" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >	
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" placeholder="Zip" ng-model = "colzip"  value="" pattern="^[0-9]{5,6}" title="Please enter valid zip code only" >	
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">
+					<input class = "registerInput" type="text" style=""  placeholder="Country" ng-model = "colcountry" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >	
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+						
+				</div>
+			</div>
+			
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" onclick="colSkip()">Skip</button>
+				</div>	
+				<div style="display:table-cell;width:20%;vertical-align:middle;font-family: roboto-regular;">
+				</div>			
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" ng-click="collegeregistration2()">Next</button>
+				</div>
+			</div>	
+		</form>
+	</div>
+	<div id="company_registration_1_dialog" style="display:none">
+		<form name="companyRegistration1" ng-submit="companyregistration1(companyRegistration1.$valid)">
+			<div style="text-align:center;color:black;font-family: roboto-regular;margin:10px;font-size: 15px;">Please fill in your details</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" ng-model="companyName" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed with the length 2 or more" style="" placeholder="Company Name *" required>
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model="compWebsite" style="" placeholder="Website">	
+				</div>
+			</div>	
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+					Industry Type
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+					Internships	
+				</div>
+			</div>	
+			<div style="display:table;width:100%;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<select id="industryType"  class = "selectOption" ng-model="industryType" data-role="slider">
+		 				<option value="">Select One</option>
+						<option value="0">Software</option>
+						<option value="1">IT</option>
+						<option value="2">Hardware</option>
+					</select> 	
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<select id="internships"  class = "selectOption" ng-model="internships" data-role="slider">
+		 				<option value="">Select One</option>
+						<option value="0">IT</option>
+						<option value="1">Management</option>
+					</select> 	
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" ng-model="valuesAndCulture" style="" placeholder="Values & Culture" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model="affiliatedCompanies" style="" placeholder="Affiliated Companies" >					
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model="compPhoneNumber" style="" placeholder="Contact Number" pattern="^([0-9]{3})?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$" title="Please enter correct phone number" >	
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model="compEmailID" style="" placeholder="Email ID" pattern="^[a-zA-Z0-9_\-.]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-.]+$" title="Please enter valid mailID">	
+				</div>
+			</div>			
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" placeholder="Street" ng-model = "compStreet">	
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" placeholder="City" ng-model = "compCity" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" placeholder="State" ng-model = "compState" value="" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >	
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" style="" placeholder="Zip" ng-model = "compZip"  value="" pattern="^[0-9]{5,6}" title="Please enter valid zip code only" >	
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">
+					<input class = "registerInput" type="text" style=""  placeholder="Country" ng-model = "compCountry" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed" >	
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+						
+				</div>
+			</div>			
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+				</div>	
+				<div style="display:table-cell;width:20%;vertical-align:middle;font-family: roboto-regular;">
+				</div>			
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" ng-click="companyregistration1()">Next</button>
+				</div>
+			</div>	
+		</form>
+	</div>
+	<div id="institution_registration_1_dialog" style="display:none">
+		<form name="institutionRegistration1" ng-submit="institutionregistration1(institutionRegistration1.$valid)">
+			<div style="text-align:center;color:black;font-family: roboto-regular;margin:10px;font-size: 15px;">Please fill in your details</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" ng-model="institutionName" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed with the length 2 or more" style="" placeholder="Institution Name *" required>
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model="instWebsite" style="" placeholder="Website">	
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" ng-model="specialization" style="" placeholder="Specialization" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model="instCourses" style="" placeholder="Courses Offered" >					
+				</div>
+			</div>	
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+					Certificates Offered
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+					Locations	
+				</div>
+			</div>	
+			<div style="display:table;width:100%;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<select id="certificates" class = "selectOption" ng-model="certificates" data-role="slider">
+						<option value="">Select One</option>
+						<option value="0">PROFESSIONAL</option>
+						<option value="1">COLLEGIATE</option>
+					</select> 	
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<select id="location"  class = "selectOption" ng-model="location" data-role="slider">
+						<option value="">Select One</option>
+						<option value="0">ONLINE</option>
+						<option value="1">OFFCAMPUS</option>
+						<option value="2">ONCAMPUS</option>
+					</select>	
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+					Junior College	
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+						
+				</div>
+			</div>
+			<div style="display:table;width:100%;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<select id="juniorcollege"  class = "selectOption" ng-model="juniorcollege" data-role="slider">
+						<option value="">Select One</option>
+						<option value="0">Yes</option>
+						<option value="1">No</option>
+					</select>
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model="affilation" style="" placeholder="Affiliations" >					
+				</div>
+			</div>					
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+				</div>	
+				<div style="display:table-cell;width:20%;vertical-align:middle;font-family: roboto-regular;">
+				</div>			
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" ng-click="institutionregistration1()">Next</button>
+				</div>
+			</div>	
+		</form>
+	</div>
+	<div id="bank_registration_1_dialog" style="display:none">
+		<form name="bankRegistration1" ng-submit="bankregistration1(bankRegistration1.$valid)">
+			<div style="text-align:center;color:black;font-family: roboto-regular;margin:10px;font-size: 15px;">Please fill in your details</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" ng-model="bankName" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed with the length 2 or more" style="" placeholder="Bank Name *" required>
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model="accountEligibility" style="" placeholder="Account Eligibility">	
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+					Account Types
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+						
+				</div>
+			</div>	
+			<div style="display:table;width:100%;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<select id="scholarshipType" class = "selectOption"  ng-model="accountType" data-role="slider">
+		 				<option value="">Select One</option>
+						<option value="0">Savings</option>
+						<option value="1">Checking</option>
+					</select>
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model="accountProcessDays" style="" placeholder="Account Processing Days" >					
+				</div>
+			</div>	
+			
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model="minOpeningBalance" style="" placeholder="Minimum Opening Deposit" > 	
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model="monthlyMaintainance" style="" placeholder="Monthly Maintenance Fee" >	
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model="interestTiers" style="" placeholder="Interest Tiers" >	
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model="loanEligibility" style="" placeholder="Student Loan Eligibility" >	
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" ng-model="loanProcessDays" style="" placeholder="Student Loan Processing Days" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+										
+				</div>
+			</div>					
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+				</div>	
+				<div style="display:table-cell;width:20%;vertical-align:middle;font-family: roboto-regular;">
+				</div>			
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" ng-click="bankregistration1()">Next</button>
+				</div>
+			</div>	
+		</form>
+	</div>
+	<div id="scholarship_registration_1_dialog" style="display:none">
+		<form name="scholarshipRegistration1" ng-submit="scholarshipregistration1(scholarshipRegistration1.$valid)">
+			<div style="text-align:center;color:black;font-family: roboto-regular;margin:10px;font-size: 15px;">Please fill in your details</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<input class = "registerInput" type="text" ng-model="scholarshipName" pattern="^[A-Za-z ]{2,100}$" title="Only Alphabets are allowed with the length 2 or more" style="" placeholder="Sponsor Name *" required>
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="number" ng-model="awardedAmount" style="" placeholder="Awarded Amount">	
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+					Scholarship Types
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+						
+				</div>
+			</div>	
+			<div style="display:table;width:100%;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">		
+					<select id="scholarshipType" class = "selectOption"  ng-model="scholarshipType" data-role="slider">
+		 				<option value="">Select One</option>
+						<option value="0">Grant</option>
+						<option value="1">Sports</option>
+						<option value="2">Fellowship</option>
+						<option value="3">Need based</option>
+						<option value="4">Military</option>
+						<option value="5">Religious</option>
+					</select>	
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="number" ng-model="noOfAwardsAvailable" style="" placeholder="No. of Awards Available" >					
+				</div>
+			</div>	
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+					Application Start Date
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;padding-left:10px;color:lightgray">	
+					Application End Date	
+				</div>
+			</div>
+			<div style="display:table;width:100%;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;color:lightgray">	
+					<input class = "registerInput" type="text" id="startschodate" data-format="DD-MM-YYYY" data-template="D MMM YYYY" name="startschodate" >
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle;font-family: roboto-regular;font-size:9px;color:lightgray">	
+					<input class = "registerInput" type="text" id="endschodate" data-format="DD-MM-YYYY" data-template="D MMM YYYY" name="endschodate" >	
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model="selectionCriteria" style="" placeholder="Selection Criteria" > 	
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model="selectionProcess" style="" placeholder="Selection Process" >	
+				</div>
+			</div>
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model="minEligibilityRequirement" style="" placeholder="Min Eligibility Requirement" >	
+				</div>
+				<div style="display:table-cell;width:20%;vertical-align:middle;text-align:center">
+					
+				</div>
+				<div style="display:table-cell;width:40%;vertical-align:middle">	
+					<input class = "registerInput" type="text" ng-model="applyOnSite" style="" placeholder="Apply Onsite" >	
+				</div>
+			</div>					
+			<div style="display:table;width:100%;margin-top:20px;">
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+				</div>	
+				<div style="display:table-cell;width:20%;vertical-align:middle;font-family: roboto-regular;">
+				</div>			
+				<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+					<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" ng-click="scholarshipregistration1()">Next</button>
+				</div>
+			</div>	
+		</form>
+	</div>	
+</div>
+<form name="index" ng-submit="login(index.$valid)">
+<div id="content" >
+  <div style="display:table;width:100%;">
+	<div style="display:table-cell;width:28%;vertical-align:middle">	
+	</div>
+	<div style="display:table-cell;width:21%;vertical-align:middle;color:#f2f2f2;font-family: roboto-bold;font-size: 15px;">
+		Email Id<br>
+	</div>
+	<div style="display:table-cell;width:4%;vertical-align:middle">	
+	</div>
+	<div style="display:table-cell;width:21%;vertical-align:middle;color:#f2f2f2;font-family: roboto-bold;font-size: 15px;">
+		Password<br>
+	</div>
+	<!-- <div style="display:table-cell;width:2%;vertical-align:middle">	
+	</div> -->
+	<div style="display:table-cell;width:4%;vertical-align:middle;text-align:left;">
+	</div>
+	<div style="display:table-cell;width:21%;vertical-align:middle">	
+	</div>
+  </div>
+  <div style="display:table;width:100%;">
+	<div style="display:table-cell;width:28%;vertical-align:middle">	
+	</div>
+	<div style="display:table-cell;width:21%;vertical-align:middle;color:#f2f2f2;font-family: roboto-bold;">
+		<input class = "registerInput" style="padding-left:10px" type="text" ng-model="loginemailID" required><br>
+	</div>
+	<div style="display:table-cell;width:4%;vertical-align:middle">	
+	</div>
+	<div style="display:table-cell;width:20%;vertical-align:middle;color:#f2f2f2;font-family: roboto-bold;">
+		<input class = "registerInput" style="padding-left:10px" type="password"  ng-model="loginpassword" required><br>
+	</div>
+	<div style="display:table-cell;width:4%;vertical-align:middle">	
+	</div>
+	<div style="display:table-cell;width:2%;vertical-align:middle;text-align:left;">
+		
+	</div>
+	<!-- <div style="display:table-cell;vertical-align:middle;color:#f2f2f2;float:right;font-family: roboto-bold;">
+		
+	</div> -->
+	<div style="display:table-cell;width:21%;vertical-align:middle">	
+	</div>
+  </div>
+	
+  <div style="display:table;width:100%;">
+	<div style="display:table-cell;width:28%;vertical-align:middle">	
+	</div>
+	<div style="display:table-cell;width:21%;vertical-align:middle;color:#f2f2f2;font-family: roboto-bold;">
+		<input type="checkbox" style="width:20px;padding-left:0px;vertical-align:middle;"/><a style="font-family: roboto-regular">Keep me logged in</a><br>
+	</div>
+	<div style="display:table-cell;width:4%;vertical-align:middle">	
+	</div>
+	<div style="display:table-cell;width:20%;vertical-align:middle;color:#f2f2f2;font-family: roboto-bold;">
+		<a style="cursor:pointer;font-family: roboto-regular"  id="fp_dialog_open">Forgot&nbsp;&nbsp;Password?</a><br>
+	</div>
+	<div style="display:table-cell;width:2%;vertical-align:middle">	
+	</div>
+	<div style="display:table-cell;width:4%;vertical-align:middle;text-align:left;">
+	</div>
+	<div style="display:table-cell;width:21%;vertical-align:middle">	
+	</div>
+  </div>
+  <div style="display:table;width:100%;">
+	<div style="display:table-cell;width:28%;vertical-align:middle">	
+	</div>
+	<div style="display:table-cell;width:21%;vertical-align:middle;color:#f2f2f2;font-family: roboto-bold;">
+		
+	</div>
+	<div style="display:table-cell;width:4%;vertical-align:middle">	
+	</div>
+	<div style="display:table-cell;width:20%;vertical-align:middle;color:#f2f2f2;float:right;font-family: roboto-bold;    margin-right: 15%;">
+		<button ng-click="login()" class ="registerButton" style="background-color:#4cb648;width: 80px;">Login</button>
+	</div>
+	<div style="display:table-cell;width:2%;vertical-align:middle">	
+	</div>
+	<div style="display:table-cell;width:4%;vertical-align:middle;text-align:left;">
+		
+	</div>
+	<div style="display:table-cell;width:21%;vertical-align:middle">	
+	</div>
+  </div>
+</div>
+
+	<!-- Mentor Details confirm_dialog -->
+<div id="mentor_dialog" style="display:none">
+		<div style="text-align:center;color:black;font-family: roboto-regular;margin:10px;font-size: 15px;">Mentor</div>
+	
+		<div style="display:table;width:100%;margin-top:40px;">
+			<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+<!-- 				<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" ng-click ="mentordetails()" onclick="mentor1()">Do you want to Mentor</button> -->
+<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" ng-click ="mentordetails()">Do you want to Mentor</button>
+			</div>	
+			<div style="display:table-cell;width:20%;vertical-align:middle;font-family: roboto-regular;">
+			</div>			
+			<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+				<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" onclick="chooseMentor()">Do you want to Choose Mentor</button>
+			</div>		
+		</div>	
+	</div>
+	<!-- End Mentor Details confirm_dialog -->
+	<!-- validUser confirm_dialog -->
+<div id="validUser_dialog" style="display:none">
+		<div style="text-align:center;color:black;font-family: roboto-regular;margin:10px">{{invalidError}}</div>
+		<div style="display:table;width:100%;margin-top:40px;">
+			<div style="display:table-cell;width:40%;vertical-align:middle;text-align:center;font-family: roboto-regular;">
+				<button style="vertical-align:middle;background-color:#66cccc;width:100px;height:30px;font-size:10px" onclick ="invalidUsername()">OK</button>
+			</div>	
+		</div>	
+	</div>
+	<!-- End validUser Details confirm_dialog -->
+</form>
+<div id="footer" style="display:table;width:100%">
+	<div style="display:table-cell;width:10%;vertical-align:middle">
+	</div>
+	<div style="display:table-cell;width:10%;vertical-align:middle;text-align:center">
+		Register as Bank, Company or Institution 
+	</div>
+	<div style="display:table-cell;width:10%;vertical-align:middle">
+		<button id="special_register_dialog_open" class ="registerButton" style="background-color:#4cb648;width: 80px;">Sign Up</button>
+	</div>
+	<div style="display:table-cell;width:20%;vertical-align:middle;text-align:right;padding-right:5px">
+		Click to login with
+	</div>
+	<div style="display:table-cell;width:24.5%;vertical-align:middle;margin-left:5px">
+		<img src="img/fb.png" onclick="checkLoginState();" width="30px" height="30px" style="cursor:pointer;margin-right:5px">
+		<!-- <img src="img/twitter.png" width="30px" height="30px" style="cursor:pointer;margin-right:5px">
+		<img src="img/g+.png" width="30px" height="30px" style="cursor:pointer;margin-right:5px">
+		<img src="img/in.png" width="30px" height="30px" style="cursor:pointer;"> -->
+	</div>
+	<div style="display:table-cell;width:5.5%;vertical-align:middle;text-align:center">
+		Register as an Individual 
+	</div>
+	<div style="display:table-cell;width:10%;vertical-align:middle;">
+		<button id="register_dialog_open" class ="registerButton" style="background-color:#4cb648;width: 80px;">Sign Up</button>
+	</div>
+	<div style="display:table-cell;width:10%;vertical-align:middle">
+	</div>
+</div>
+
+<script>
+	angular.module("nestlings", [])
+	
+	.directive("passwordVerify", function() {
+		   return {
+		      require: "ngModel",
+		      scope: {
+		        passwordVerify: '='
+		      },
+		      link: function(scope, element, attrs, ctrl) {
+		        scope.$watch(function() {
+		            var combined;
+		
+		            if (scope.passwordVerify || ctrl.$viewValue) {
+		               combined = scope.passwordVerify + '_' + ctrl.$viewValue; 
+		            }                    
+		            return combined;
+		        }, function(value) {
+		            if (value) {
+		                ctrl.$parsers.unshift(function(viewValue) {
+		                    var origin = scope.passwordVerify;
+		                    if (origin !== viewValue) {
+		                        ctrl.$setValidity("passwordVerify", false);
+		                        return undefined;
+		                    } else {
+		                        ctrl.$setValidity("passwordVerify", true);
+		                        return viewValue;
+		                    }
+		                });
+		            }
+		        });
+		     }
+		   };
+	})	
+	
+	.controller('logincontrol', function($scope, $http) {   
+		
+		localStorage.setItem('userType', '0');
+   		$scope.login = function (isValid) {
+	  	 	var pswrd = $scope.loginpassword;       
+	      	var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9\+\/\=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/\r\n/g,"\n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}}
+			var encodedString = Base64.encode(pswrd);
+	   
+	   		if(isValid){	  
+				var parameter = JSON.stringify({
+					emailID :$scope.loginemailID, 
+					password :encodedString});
+       	
+			    $http.post(baseUrl+'user/login', parameter).
+			    success(function(data, status, headers, config) {
+			
+			        console.log("status : "+data.status);
+			        console.log("Data : "+JSON.stringify(data));
+			        console.log("Data : "+JSON.stringify(data.userType));
+			        if(data.status === "success"){
+			        	localStorage.setItem("userID", data.userID);
+			        	localStorage.setItem("userType", data.userType); 
+			        	if(data.userType == "COLLEGE"){
+			        		window.location.href="collegeprofiledetails.html";
+			        	}else if(data.userType == "COMPANY"){
+			        		window.location.href="companyprofiledetails.html";
+			        	}else if(data.userType == "INSTITUTION"){
+			        		window.location.href="institutionprofiledetails.html";
+			        	}else if(data.userType == "BANK"){
+			        		window.location.href="bankprofiledetails.html";
+			        	}else if(data.userType == "SCHOLARSHIP"){
+			        		window.location.href="scholarshipprofiledetails.html";
+			        	}else if(data.userType == "LECTURER"){
+			        		window.location.href="landing.html";
+			        	}else if(data.userType == "ALUMNI"){
+			        		window.location.href="landing.html";
+			        	}else{
+			            	window.location.href="landing.html";
+			        	}
+			        }
+			        else{
+			        	$scope.invalidError ="Please enter valid user name and password";
+			        	$( "#validUser_dialog" ).dialog( "open" );
+			        }
+			      }).
+			      error(function(data, status, headers, config) {
+			    	  console.log("error"+status);			     
+			      }); 
+	   		}
+   		}
+   		
+   		
+   		$scope.register = function (isValid) {   	      
+   	    	  if(isValid){
+   	    	   	var pswrd = $scope.password;
+   	         	var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9\+\/\=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/\r\n/g,"\n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}}
+   	    	  	var encodedString = Base64.encode(pswrd);   	       
+
+		   		var parameter = JSON.stringify({
+		   			emailID :$scope.emailID, 
+		   			password :encodedString,
+		   			userType :localStorage.getItem("userType")});   	    	   
+   	       
+		  		var postUrl = baseUrl+'user/register';
+		   		console.log("URL : "+postUrl);
+		   	    $http.post(postUrl, parameter).
+		   	    success(function(data, status, headers, config) {		   	      
+		   	        console.log("status : "+status);
+		   	        localStorage.setItem("userID", data.data.userID);
+		   	        if(data.data.userExist == 0){	
+		   	        	if(id != null && refer_code != null){
+		   	        		var parameter = JSON.stringify({
+		   						userID : id.replace (/"/g,''), 
+		   						referenceCode : refer_code.replace (/"/g,'')
+		   						});
+		   		
+		   				    $http.post(baseUrl+'points/referpoints', parameter).
+		   				    success(function(data, status, headers, config) {	
+		   				    	
+		   				      })
+		   				      .error(function(data, status, headers, config) {
+		   				    	  console.log("error"+status);			     
+		   				      }); 
+		   	        	}
+		   	        	if(localStorage.getItem("userType") == '0'){
+		   	        		$( "#register_dialog" ).dialog("close"); 
+		   	        		$( "#basic_details_dialog" ).dialog("open");
+		   	        	}else if(localStorage.getItem("userType") == '1'){
+			   	        	$( "#register_dialog" ).dialog("close"); 
+			   	        	$( "#basic_details_dialog" ).dialog("open");
+		   	        	}else if(localStorage.getItem("userType") == '2'){
+				   	      	$( "#register_dialog" ).dialog("close"); 
+				   	       	$( "#basic_details_dialog" ).dialog("open"); 
+		   	        	}else if(localStorage.getItem("userType") == '3'){
+		   	        		$( "#special_register_dialog" ).dialog("close"); 
+		   	        		$( "#college_registration_1_dialog" ).dialog("open");
+		   	        	}else if(localStorage.getItem("userType") == '4'){
+		   	        		$( "#special_register_dialog" ).dialog("close"); 
+		   	        		$( "#company_registration_1_dialog" ).dialog("open");
+		   	        	}else if(localStorage.getItem("userType") == '5'){
+		   	        		$( "#special_register_dialog" ).dialog("close"); 
+		   	        		$( "#institution_registration_1_dialog" ).dialog("open");
+		   	        	}else if(localStorage.getItem("userType") == '6'){
+		   	        		$( "#special_register_dialog" ).dialog("close"); 
+		   	        		$( "#bank_registration_1_dialog" ).dialog("open");
+		   	        	}else if(localStorage.getItem("userType") == '7'){
+		   	        		$( "#special_register_dialog" ).dialog("close"); 
+		   	        		$( "#scholarship_registration_1_dialog" ).dialog("open");
+		   	        	}
+		   	        }else if (data.data.userExist == 1){
+		   	        	$scope.userExistError = "User already exist";
+		   	        }
+		   	        
+		   	      }).
+		   	      error(function(data, status, headers, config) {
+		   	    	  console.log("error"+status);
+		   	     
+		   	      }); 
+   	          }
+
+   	   }
+   		
+   		$scope.profileregister = function (isValid) {   	       
+		   	  if(isValid){		   		  
+		   		//console.log($('#date').combodate('getValue', null));
+		   		var dd = $('#date').combodate('getValue', null);
+		   		 var parameter = JSON.stringify({
+		   			 userID :localStorage.getItem("userID"),
+		   			 firstName :$scope.firstName, 
+		   		     middleName :$scope.middleName,
+		   			 lastName :$scope.lastName,
+		   			 dob :dd,
+		   			 genderID :genderImage,
+		   			 phoneNumber :$scope.mobileNumber,
+		   			 streetName :$scope.street,
+		   			 city :$scope.city,
+		   			 state :$scope.state,
+		   			 zip :$scope.zip,
+		   			 country :$scope.country
+		   			 }); 		   	      
+		   	  
+		   		    $http.post(baseUrl+'user/updateProfile', parameter) 
+				   	    .success(function(data, status, headers, config) {				   	      
+				   	        console.log("status"+status);
+				   	     	$( "#basic_details_dialog" ).dialog("close");
+				   	     if(localStorage.getItem("userType") == '0'){
+				   	     	$( "#student_college_dialog" ).dialog("open");
+				   	     }
+				   	     else if(localStorage.getItem("userType") == '1'){
+				   	    	$( "#faculty_basic_dialog" ).dialog("open");
+				   	     }
+				   	     else if(localStorage.getItem("userType") == '2'){
+				   	    	$( "#alumni_college_dialog" ).dialog("open");
+				   	     }
+				   	      })
+				   	      .error(function(data, status, headers, config) {
+				   	    	  console.log("error"+status);
+				   	     
+				   	      }); 
+		   	  } 
+   	    }
+   		
+   		$scope.collegedetails = function (isValid) {
+	   	   if(isValid){
+	   			var startcollegedate = $('#startcollegedate').combodate('getValue', null);
+	   			var endcollegedate = $('#endcollegedate').combodate('getValue', null);
+	   			var parameter = JSON.stringify({	   				  
+	   			userID : localStorage.getItem("userID"),
+	   			startDate :startcollegedate,
+	   			endDate :endcollegedate, 
+	   			collegeName : $scope.schoolName,
+	   			course : $scope.collegecourse,
+	   			/* grade :$scope.grade, */
+	   			gpa :$scope.gpa,
+	   			streetName :$scope.collegestreet,
+	   			city :$scope.collegecity,
+	   			state :$scope.collegestate,
+	   			zip :$scope.collegezip,
+	   			country :$scope.collegecountry}); 
+	   			
+	   		    $http.post(baseUrl+'student/school', parameter)
+	   	    	.success(function(data, status, headers, config) {	   	      
+	   	        	console.log("status"+status);
+	   	        	$( "#student_college_dialog" ).dialog("close");
+		   	     	$( "#student_work_dialog" ).dialog("open");    
+	   	      	})
+	   	      	.error(function(data, status, headers, config) {
+	   	    	  	console.log("error"+data);	   	     
+	   	      	}); 
+	   	   }
+   	    }
+   		
+   		$scope.facultybasicdetail = function (isValid) {
+ 	   	   if(isValid){
+ 	   			
+ 	   			var parameter = JSON.stringify({	   				  
+ 	   			userID : localStorage.getItem("userID"),
+ 	   		    summary :$scope.summary, 
+ 	        	eduQualification : $scope.eduQualification, 
+ 	            uniAttended :$scope.uniAttended,
+ 	            researchAffiliation :$scope.researchAffiliation,
+ 	            researchAssistance :$scope.researchAssistance,
+            	teachingAssistance :$scope.teachingAssistance,
+            	experience :$scope.experience,
+ 	            projects :$scope.projects,
+ 	            specializations :$scope.specializations,
+		    	mentor :$scope.mentor}); 
+ 	   			
+ 	   			 console.log(parameter); 
+ 	   			
+ 	   		    $http.post(baseUrl+'faculty/basicdetails', parameter)
+ 	   	    	.success(function(data, status, headers, config) {	   	      
+ 	   	        	console.log("status"+status);
+ 	   	        	$( "#faculty_basic_dialog" ).dialog("close");
+ 		   	     	$( "#faculty_work_dialog" ).dialog("open");    
+ 	   	      	})
+ 	   	      	.error(function(data, status, headers, config) {
+ 	   	    	  	console.log("error"+data);	   	     
+ 	   	      	}); 
+ 	   	   }
+    	    }
+   		
+   		$scope.alumnicollegedetails = function (isValid) {
+ 	   	   if(isValid){
+ 	   			var alumnistartcollegedate = $('#alumnistartcollegedate').combodate('getValue', null);
+ 	   			var alumniendcollegedate = $('#alumniendcollegedate').combodate('getValue', null);
+ 	   			var parameter = JSON.stringify({	   				  
+ 	   			userID : localStorage.getItem("userID"),
+ 	   			startDate :alumnistartcollegedate,
+ 	   			endDate :alumniendcollegedate, 
+ 	   		    collegeName : $scope.alumnicollegeName, 
+			    course : $scope.alumnicollegecourse,
+			    website :$scope.alumnicollegewebsite,
+			    streetName :$scope.alumnicollegestreet,
+			    city :$scope.alumnicollegecity,
+			    state :$scope.alumnicollegestate,
+			    zip :$scope.alumnicollegezip,
+			    country :$scope.alumnicollegecountry}); 
+ 	   			
+ 	   		    $http.post(baseUrl+'alumni/college', parameter)
+ 	   	    	.success(function(data, status, headers, config) {	   	      
+ 	   	        	console.log("status"+status);
+ 	   	        	$( "#alumni_college_dialog" ).dialog("close");
+ 		   	     	$( "#alumni_work_dialog" ).dialog("open");    
+ 	   	      	})
+ 	   	      	.error(function(data, status, headers, config) {
+ 	   	    	  	console.log("error"+data);	   	     
+ 	   	      	}); 
+ 	   	   }
+    	    }
+
+   		
+   		$scope.studentworkdetails = function (isValid) {
+   	     if(isValid){
+   	    	 var startworkdate = $('#startworkdate').combodate('getValue', null);
+   			 var endworkdate = $('#endworkdate').combodate('getValue', null);
+   			 var parameter = JSON.stringify({   				  
+   			 userID : localStorage.getItem("userID"),
+   			 startDate : startworkdate,
+   			 endDate : endworkdate,
+   			 companyName :$scope.workcompanyName,
+   			 title : $scope.worktitle,
+   			 website : $scope.workwebsite,
+   			 streetName : $scope.workstreet,
+   			 description : $scope.description,
+   			 city :  $scope.workcity,
+   			 state : $scope.workstate,
+   			 zip : $scope.workzip,
+   			 country : $scope.workcountry
+   			});    	   			 
+   	       
+   		   $http.post(baseUrl+'student/work', parameter)
+   	       .success(function(data, status, headers, config) {
+   	        	console.log("status"+status);   	   
+   	        	$( "#student_work_dialog" ).dialog("close");
+	   	     	$( "#student_project_dialog" ).dialog("open"); 	         
+   	       })
+   	      .error(function(data, status, headers, config) {
+   	    	  	console.log("error"+data);   	     
+   	      });  
+   	     }
+   	    }
+   		$scope.facultyworkdetails = function (isValid) {
+      	     if(isValid){
+      	    	 var facultystartworkdate = $('#facultystartworkdate').combodate('getValue', null);
+      			 var facultyendworkdate = $('#facultyendworkdate').combodate('getValue', null); 
+      			var parameter = JSON.stringify({
+      				userID : localStorage.getItem("userID"), //1,//
+      				startDate : $scope.facultystartworkdate, // 21,//
+      				endDate : $scope.facultyendworkdate,  //12,//
+      				collegeName :$scope.facultycollegeName, // "dew",//
+      				title : $scope.facultytitle,  //"develop",//
+      				website : $scope.facultywebsite,  //"google",//
+      				streetName : $scope.facultystreet, // "strre",//
+      				city :  $scope.facultycity, // "bangalore",//
+      				state : $scope.facultystate,  //"karnatak",//
+      				zip : $scope.facultyzip,  //1212,//
+      				country : $scope.facultycountry  //"India"//
+      		     	}); 
+      		   $http.post(baseUrl+'faculty/work', parameter)
+      	       .success(function(data, status, headers, config) {
+      	        	console.log("status"+status);   	   
+      	        	$( "#faculty_work_dialog" ).dialog("close");
+   	   	     	    $( "#faculty_project_dialog" ).dialog("open"); 	         
+      	       })
+      	      .error(function(data, status, headers, config) {
+      	    	  	console.log("error"+data);   	     
+      	      });  
+      	     }
+      	    }
+   		
+   		$scope.alumniworkdetails = function (isValid) {
+     	     if(isValid){
+     	    	 var alumnistartworkdate = $('#alumnistartworkdate').combodate('getValue', null);
+     			 var alumniendworkdate = $('#alumniendworkdate').combodate('getValue', null); 
+     			var parameter = JSON.stringify({
+     				userID : localStorage.getItem("userID"), //1,//
+     				startDate : $scope.alumnistartworkdate, // 21,//
+     				endDate : $scope.alumniendworkdate,  //12,//
+     				companyName :$scope.alumniworkcompanyName, // "dew",//
+     				title : $scope.alumniworktitle,  //"develop",//
+     				website : $scope.alumniworkwebsite,  //"google",//
+     				streetName : $scope.alumniworkstreet, // "strre",//
+     				description : $scope.alumniworkdescription, // "strre",//
+     				city :  $scope.alumniworkcity, // "bangalore",//
+     				state : $scope.alumniworkstate,  //"karnatak",//
+     				zip : $scope.alumniworkzip,  //1212,//
+     				country : $scope.alumniworkcountry
+     		     	}); 
+     		   $http.post(baseUrl+'alumni/work', parameter)
+     	       .success(function(data, status, headers, config) {
+     	        	console.log("status"+status);   	   
+     	        	$( "#alumni_work_dialog" ).dialog("close");
+  	   	     	    $( "#alumni_project_dialog" ).dialog("open"); 	         
+     	       })
+     	      .error(function(data, status, headers, config) {
+     	    	  	console.log("error"+data);   	     
+     	      });  
+     	     }
+     	    }
+   		$scope.studentprojectdetails = function (isValid) {
+      	     if(isValid){
+      	    	 var startprojectdate = $('#startprojectdate').combodate('getValue', null);
+      			 var endprojectdate = $('#endprojectdate').combodate('getValue', null);
+      			 var parameter = JSON.stringify({   				  
+      			 userID : localStorage.getItem("userID"),
+      			 startDate : startprojectdate,
+      			 endDate : endprojectdate,
+      			 companyName :$scope.projectcompanyName,
+      			 title : $scope.projecttitle,
+      			 description :$scope.studentProjprojectDescription,
+      			 name :$scope.studentProjprojectName,
+      			 responsibilities :$scope.studentProjresponsibilities,
+      			 website : $scope.projectwebsite,
+      			 streetName : $scope.projectstreet,
+      			 city :  $scope.projectcity,
+      			 state : $scope.projectstate,
+      			 zip : $scope.projectzip,
+      			 country : $scope.projectcountry
+      			});   
+      	       
+      		   $http.post(baseUrl+'student/project', parameter)
+      	       .success(function(data, status, headers, config) {
+      	        	console.log("status"+status);   	           	
+      	        	$( "#student_project_dialog" ).dialog("close");
+    	   	     	$( "#student_training_dialog" ).dialog("open");  	         
+      	       })
+      	      .error(function(data, status, headers, config) {
+      	    	  	console.log("error"+data);   	     
+      	      });  
+      	     }
+      	 }
+   		$scope.facultyprojectdetails = function (isValid) {
+     	     if(isValid){
+     	    	 var facultystartprojectdate = $('#facultystartprojectdate').combodate('getValue', null);
+     			 var facultyendprojectdate = $('#facultyendprojectdate').combodate('getValue', null);
+     			 var parameter = JSON.stringify({   				  
+     				userID : localStorage.getItem("userID"), //1,//
+     				startDate : $scope.facultystartprojectdate, // 21,//
+     				endDate : $scope.facultyendprojectdate,  //12,//
+     				companyName :$scope.facultytracompanyName, // "dew",//
+     				title : $scope.facultytratitle,  //"develop",//
+     				website : $scope.facultytrawebsite,  //"google",//
+     				streetName : $scope.facultytrastreet, // "strre",//
+     				city :  $scope.facultytracity, // "bangalore",//
+     				state : $scope.facultytrastate,  //"karnatak",//
+     				zip : $scope.facultytrazip,  //1212,//
+     				country : $scope.facultytracountry  //"India"//
+     				});   
+     	       
+     		   $http.post(baseUrl+'faculty/project', parameter)
+     	       .success(function(data, status, headers, config) {
+     	        	console.log("status"+status);   	           	
+     	        	$( "#faculty_project_dialog" ).dialog("close");
+     	        	window.location.href='landing.html' 	         
+     	       })
+     	      .error(function(data, status, headers, config) {
+     	    	  	console.log("error"+data);   	     
+     	      });  
+     	     }
+     	 }
+   		
+   		$scope.alumniprojectdetails = function (isValid) {
+    	     if(isValid){
+    	    	 var alumnistartprojectdate = $('#alumnistartprojectdate').combodate('getValue', null);
+    			 var alumniendprojectdate = $('#alumniendprojectdate').combodate('getValue', null);
+    			 var parameter = JSON.stringify({   				  
+    				userID : localStorage.getItem("userID"), //1,//
+    				startDate : $scope.alumnistartprojectdate, // 21,//
+    				endDate : $scope.alumniendprojectdate,  //12,//
+    				companyName :$scope.alumniprojectcompanyName, // "dew",//
+    				title : $scope.alumniprojecttitle,  //"develop",//
+    				description :$scope.alumnistudentProjprojectDescription,
+    				name :$scope.alumnistudentProjprojectName,
+    				responsibilities :$scope.alumnistudentProjresponsibilities,
+    				website : $scope.alumniprojectwebsite,  //"google",//
+    				streetName : $scope.alumniprojectstreet, // "strre",//
+    				city :  $scope.alumniprojectcity, // "bangalore",//
+    				state : $scope.alumniprojectstate,  //"karnatak",//
+    				zip : $scope.alumniprojectzip,  //1212,//
+    				country : $scope.alumniprojectcountry  //"India"//
+    				});   
+    	       
+    		   $http.post(baseUrl+'alumni/project', parameter)
+    	       .success(function(data, status, headers, config) {
+    	        	console.log("status"+status);   	           	
+    	        	$( "#alumni_project_dialog" ).dialog("close");
+    	        	window.location.href='landing.html' 	         
+    	       })
+    	      .error(function(data, status, headers, config) {
+    	    	  	console.log("error"+data);   	     
+    	      });  
+    	     }
+    	 }
+
+   		$scope.studenttrainingdetails = function (isValid) {
+     	     if(isValid){
+     	    	 var starttrainingdate = $('#starttrainingdate').combodate('getValue', null);
+     			 var endtrainingdate = $('#endtrainingdate').combodate('getValue', null);
+     			 var parameter = JSON.stringify({   				  
+     			 userID : localStorage.getItem("userID"),
+     			 startDate : starttrainingdate,
+     			 endDate : endtrainingdate,
+     			 companyName :$scope.trainingcompanyName,
+     			 course : $scope.trainingcourse,
+     			 website : $scope.trainingwebsite,
+     			 streetName : $scope.trainingstreet,
+     			 city :  $scope.trainingcity,
+     			 state : $scope.trainingstate,
+     			 zip : $scope.trainingzip,
+     			 country : $scope.trainingcountry
+     			});   
+     	       
+     		   $http.post(baseUrl+'student/training', parameter)
+     	       .success(function(data, status, headers, config) {
+     	        	console.log("status"+status);   
+     	        	$( "#student_training_dialog" ).dialog("close");  	
+     	        	window.location.href='landing.html'   	         
+     	       })
+     	      .error(function(data, status, headers, config) {
+     	    	  	console.log("error"+data);   	     
+     	      });  
+     	     }
+     	 }
+   		
+   		$scope.collegeregistration1 = function (isValid) {
+   			if(isValid){
+				var parameter = JSON.stringify({
+					userID :localStorage.getItem("userID"), 
+					collegeName : $scope.collegeName,
+					website : $scope.website,
+					certificatesOffered : $scope.certificatesOffered,
+					coursesOffered : $scope.coursesOffered,
+					gpa : $scope.gpa,
+					programsOffered : $scope.programsOffered,
+					regionalAccreditations: $scope.regionalAccreditations,
+					tuitionFees : $scope.tuitionFees});
+	
+			    $http.post(baseUrl+'college/createCollegeProfile', parameter).
+			    success(function(data, status, headers, config) {			      
+			        console.log("status : "+status);
+			        localStorage.setItem("collegeID", data.collegeID);	
+			        $( "#college_registration_1_dialog" ).dialog("close"); 
+   	        		$( "#college_registration_2_dialog" ).dialog("open");		        
+			    }).
+			    error(function(data, status, headers, config) {
+			    	  console.log("error"+status);
+			    }); 
+	   		}
+	   }
+   		
+   		$scope.collegeregistration2 = function (isValid) {
+   			
+   			if(isValid){
+				var parameter = JSON.stringify({
+					collegeID :localStorage.getItem("collegeID"), 
+					streetName : $scope.colstreet,
+					city : $scope.colcity,
+					state : $scope.colstate,
+					country : $scope.colcountry,
+					zip : $scope.colzip,
+					
+					//phoneNumber : $scope.phoneNumber,
+					emailID : $scope.colEmailID});
+				
+				$http.post(baseUrl+'college/updateCollegeAddress', parameter).
+			    success(function(data, status, headers, config) {		      
+			        console.log("status : "+status);		        
+			        
+			      }).
+			      error(function(data, status, headers, config) {
+			    	  console.log("error"+status);
+			      }); 
+				
+				
+				var parameter2 = JSON.stringify({
+					collegeID :localStorage.getItem("collegeID"), 
+					generalPhoneNumber : $scope.colGeneralPhoneNumber,
+					financialPhoneNumber : $scope.colFinancialPhoneNumber,
+					admissionsPhoneNumber : $scope.colAdmissionsPhoneNumber
+					});
+				
+				 console.log(parameter2);
+				 
+			    $http.post(baseUrl+'college/update', parameter2)
+			    .success(function(data, status, headers, config) {			      
+			        console.log("status : "+status);
+			      	
+			        $( "#college_registration_2_dialog" ).dialog("close"); 
+			        window.location.href="collegeprofiledetails.html";	        
+			    })
+			    .error(function(data, status, headers, config) {
+			    	  console.log("error"+status);
+			    }); 
+				
+   			}
+   		}
+   		
+   		$scope.companyregistration1 = function (isValid) {
+   			if(isValid){
+				var parameter = JSON.stringify({
+					userID :localStorage.getItem("userID"), 
+					companyName : $scope.companyName,
+					industryType : $scope.industryType,
+					internships : $scope.internships,
+					valuesAndCulture : $scope.valuesAndCulture,
+					affiliatedCompanies : $scope.affiliatedCompanies,
+					website: $scope.compWebsite,
+				    phoneNumber: $scope.compPhoneNumber,
+					emailID: $scope.compEmailID,
+					streetName: $scope.compStreet,
+					city: $scope.compCity,
+					state: $scope.compState,
+					zip: $scope.compZip,
+					country : $scope.compCountry});
+	
+			    $http.post(baseUrl+'company/register', parameter).
+			    success(function(data, status, headers, config) {			      
+			        console.log("status : "+status);
+			        console.log("data : "+data.companyID);
+			        localStorage.setItem("companyID", data.companyID);
+			        $( "#company_registration_1_dialog" ).dialog("close"); 
+			        window.location.href="companyprofiledetails.html";			        
+			      }).
+			      error(function(data, status, headers, config) {
+			    	  console.log("error"+status);			     
+			      }); 
+   			}
+   		}
+   		
+   		$scope.institutionregistration1 = function (isValid) {
+   			if(isValid){
+				var parameter = JSON.stringify({
+					userID :localStorage.getItem("userID"), 
+					institutionName : $scope.institutionName,
+					website : $scope.instWebsite,
+					certificates : $scope.certificates,
+					courses : $scope.instCourses,
+					specialization : $scope.specialization,
+					location: $scope.location,
+					affilation : $scope.affilation,
+					juniorcollege : $scope.juniorcollege});
+		
+			    $http.post(baseUrl+'institution/add', parameter).
+			    success(function(data, status, headers, config) {			      
+			        console.log("status : "+status);
+			        localStorage.setItem("institutionID", data.institutionID);			        
+			        $( "#institution_registration_1_dialog" ).dialog("close"); 
+			        window.location.href="institutionprofiledetails.html";			        
+			      }).
+			      error(function(data, status, headers, config) {
+			    	  console.log("error"+status);			     
+			      }); 
+   			}
+   		}
+   		
+   		$scope.bankregistration1 = function (isValid) {
+   			if(isValid){
+				var parameter = JSON.stringify({
+					userID :localStorage.getItem("userID"), 
+					bankName : $scope.bankName,
+					accountType : $scope.accountType,
+					accountEligibility : $scope.accountEligibility,
+					accountProcessDays : $scope.accountProcessDays,
+					minOpeningBalance : $scope.minOpeningBalance,
+					monthlyMaintainance: $scope.monthlyMaintainance,
+					interestTiers : $scope.interestTiers,
+					loanEligibility : $scope.loanEligibility,
+					loanProcessDays : $scope.loanProcessDays});
+	
+			    $http.post(baseUrl+'bank/add', parameter).
+			    success(function(data, status, headers, config) {			      
+			        console.log("status : "+status);
+			        console.log("data : "+data.bankID);
+			        localStorage.setItem("bankID", data.bankID);
+			        $( "#bank_registration_1_dialog" ).dialog("close"); 
+			        window.location.href="bankprofiledetails.html";	
+			      }).
+			      error(function(data, status, headers, config) {
+			    	  console.log("error"+status);			     
+			      }); 
+   			}
+   		}
+   		
+   		$scope.scholarshipregistration1 = function (isValid) {
+   			if(isValid){
+   				var sd = $('#startschodate').combodate('getValue', null);
+   				var ed = $('#endschodate').combodate('getValue', null);
+				var parameter = JSON.stringify({
+					userID :localStorage.getItem("userID"), 
+					scholarshipName : $scope.scholarshipName,
+					awardedAmount : $scope.awardedAmount,
+					scholarshipType : $scope.scholarshipType,
+					applicationStartDate : sd,
+					applicationEndDate : ed,
+					noOfAwardsAvailable: $scope.noOfAwardsAvailable,
+					selectionCriteria : $scope.selectionCriteria,
+					selectionProcess : $scope.selectionProcess,
+					minEligibilityRequirement : $scope.minEligibilityRequirement,
+					applyOnSite : $scope.applyOnSite});
+	
+			    $http.post(baseUrl+'scholarship/add', parameter).
+			    success(function(data, status, headers, config) {			      
+			        console.log("status : "+status);
+			        console.log("data : "+data.scholarshipID);
+			        localStorage.setItem("scholarshipID", data.scholarshipID);
+			        $( "#scholarship_registration_1_dialog" ).dialog("close"); 
+			        window.location.href="scholarshipprofiledetails.html";	
+			      }).
+			      error(function(data, status, headers, config) {
+			    	  console.log("error"+status);			     
+			      }); 
+   			}
+   		}
+   		var id = null, refer_code = null;
+   		var QueryString = function () {
+   		  // This function is anonymous, is executed immediately and 
+   		  // the return value is assigned to QueryString!
+   		  var query_string = {};
+   		  var query = window.location.search.substring(1); 
+   		  var vars = query.split("&");
+   		  for (var i=0;i<vars.length;i++) {
+   		    var pair = vars[i].split("=");
+   		        // If first entry with this name
+   		    if (typeof query_string[pair[0]] === "undefined") {
+   		      query_string[pair[0]] = decodeURIComponent(pair[1]);
+   		        // If second entry with this name
+   		    } else if (typeof query_string[pair[0]] === "string") {
+   		      var arr = [ query_string[pair[0]],decodeURIComponent(pair[1]) ];
+   		      query_string[pair[0]] = arr;
+   		        // If third or later entry with this name
+   		    } else {
+   		      query_string[pair[0]].push(decodeURIComponent(pair[1]));
+   		    }
+   		  } 
+   				id = query_string.id;
+   				refer_code = query_string.refer;
+   		 
+   		    return query_string;
+   		}();
+   		
+   		/* Adding mentor details   */
+	      /*  $scope.mentordetails = function () {
+  			 var parameter = JSON.stringify({   				  
+  			 userID : localStorage.getItem("userID"),
+  			 createdDate : new Date(),
+  			 userType :localStorage.getItem("userType")
+  			});   
+  	       
+  		   $http.post(baseUrl+'mentor/add', parameter)
+  	       .success(function(data, status, headers, config) {
+  	        	console.log("status"+status);   
+  	        	 $( "#mentor_dialog" ).dialog("close");
+  	 		     window.location.href="landing.html"
+  	       })
+  	      .error(function(data, status, headers, config) {
+  	    	  	console.log("error"+data);   	     
+  	      });  
+  	 } */
+	/* End adding mentor details */
+	
+	
+	/* reset Password */
+	$scope.sendResetLink = function(){
+  				var parameter = JSON.stringify({
+					emailID:$scope.resetEmailID
+					});
+  				
+  		 $http.post(baseUrl+'user/forgotpassword', parameter)
+	       .success(function(data, status, headers, config) {
+	       })
+	      .error(function(data, status, headers, config) {
+	    	  	console.log("error"+data);   	     
+	      }); 
+  		 
+  	}
+   		
+	});	
+	
+	function colskip(){		
+		$( "#college_registration_2_dialog" ).dialog("close"); 
+        //Go to details page
+	}
+	
+	function compskip(){		
+		$( "#company_registration_2_dialog" ).dialog("close"); 
+        //Go to details page
+	}
+	
+	function statusChangeCallback(response) {
+	    if (response.status === 'connected') {
+	      testAPI();	      
+	    } else if (response.status === 'not_authorized') {
+	    } else {
+	    }
+	}
+	  
+	function checkLoginState() {	  
+		FB.login( function(response) {
+			testAPI();			
+		}, { scope: 'email,public_profile' } );
+	}
+
+	window.fbAsyncInit = function() {
+	  FB.init({
+	    appId      : '1114020125288653',
+	    cookie     : true,  // enable cookies to allow the server to access the session
+	    xfbml      : true,  // parse social plugins on this page
+	    version    : 'v2.5' // use version 2.2
+	  });
+	};
+
+    (function(d, s, id) {
+	    var js, fjs = d.getElementsByTagName(s)[0];
+	    if (d.getElementById(id)) return;
+	    js = d.createElement(s); js.id = id;
+	    js.src = "//connect.facebook.net/en_US/sdk.js";
+	    fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));
+
+	  function testAPI() {
+	    console.log('Welcome!  Fetching your information.... ');
+	    FB.api('/me', function(response) {
+	      console.log('Successful login for: ' + JSON.stringify(response));
+	      var names = response.name.split(' ');
+		  var parameter1 = JSON.stringify({firstName: names[0], lastName: names[1], userType: 0, faceBookID:response.id, isFaceBookLogin: true});
+		  $.ajax({
+	            type: "POST",
+	            url: baseUrl+'user/login',
+	            async: false,
+	            data: JSON.stringify({firstName: names[0], lastName: names[1], userType: 0, faceBookID:response.id, isFaceBookLogin: true}),
+	            contentType: "application/json",
+	            complete: function (data) {
+		    		var data1 = JSON.parse(data.responseText);
+		    		localStorage.setItem("userID", data1.userID);
+		            localStorage.setItem("userType", data1.userType); 
+		            window.location.href="landing.html";
+	            }
+	      });
+	    });	    
+	  }
+	  
+	  $( document ).ready(function() {		  
+		  $( "#register_dialog" ).dialog({		 
+			  autoOpen: false,
+		    	width: 500,
+		    	height: 450,
+		    	modal: true,
+		    	show: {
+					effect: "fade",
+					duration: 150
+				},
+				hide: {
+					effect: "fade",
+					duration: 150
+				},
+		    	clickOutside: true,
+		    	clickOutsideTrigger: "#register_dialog_open" 
+		   });
+		  /* Mentor Dialog Box Open Close */
+			 /*  $( "#mentor_dialog" ).dialog({	
+			  autoOpen: false,
+		    	width: 400,
+		    	show: {
+					effect: "fade",
+					duration: 150
+				},
+				hide: {
+					effect: "fade",
+					duration: 150
+				},
+		    	clickOutside: true,
+		    		clickOutsideTrigger: "#mentor_dialog_open" 
+		   }); */
+		  /* End Mentor Dialog Box Open Close */
+		  
+		  /* validUser Dialog Box Open Close */
+			   $( "#validUser_dialog" ).dialog({	
+			  autoOpen: false,
+		    	width: 400,
+		    	show: {
+					effect: "fade",
+					duration: 150
+				},
+				hide: {
+					effect: "fade",
+					duration: 150
+				},
+		    	clickOutside: true,
+		    		clickOutsideTrigger: "#validUser_dialog_open" 
+		   }); 
+		  /* End validUser Dialog Box Open Close */
+		  $( "#fp_dialog" ).dialog({		 
+			  autoOpen: false,
+			  	width: 500,
+		    	height: 450,
+		    	modal: true,
+		    	show: {
+					effect: "fade",
+					duration: 150
+				},
+				hide: {
+					effect: "fade",
+					duration: 150
+				},
+		    	clickOutside: true,
+		    	clickOutsideTrigger: "#fp_dialog_open" 
+		   });
+		  $( "#special_register_dialog" ).dialog({		 
+			  autoOpen: false,
+			  	width: 520,
+		    	height: 530,
+		    	modal: true,
+		    	show: {
+					effect: "fade",
+					duration: 150
+				},
+				hide: {
+					effect: "fade",
+					duration: 150
+				},
+		    	clickOutside: true,
+		    	clickOutsideTrigger: "#special_register_dialog_open" 
+		   });
+		  $( "#basic_details_dialog" ).dialog({		 
+			  autoOpen: false,
+		    	width: 500,
+		    	modal: true
+		   });
+		  
+		  $( "#student_college_dialog" ).dialog({		 
+			  autoOpen: false,
+		    	width: 500,
+		    	modal: true
+		   });
+		  $( "#faculty_basic_dialog" ).dialog({		 
+			  autoOpen: false,
+		    	width: 500,
+		    	modal: true
+		   });
+		  $( "#alumni_college_dialog" ).dialog({		 
+			  autoOpen: false,
+		    	width: 500,
+		    	modal: true
+		   });
+		  $( "#student_work_dialog" ).dialog({		 
+			  autoOpen: false,
+		    	width: 500,
+		    	modal: true
+		   });
+		  $( "#faculty_work_dialog" ).dialog({		 
+			  autoOpen: false,
+		    	width: 500,
+		    	modal: true
+		   });
+		  $( "#alumni_work_dialog" ).dialog({		 
+			  autoOpen: false,
+		    	width: 500,
+		    	modal: true
+		   });
+		  $( "#student_project_dialog" ).dialog({		 
+			  autoOpen: false,
+		    	width: 500,
+		    	modal: true
+		   });
+		  $( "#faculty_project_dialog" ).dialog({		 
+			  autoOpen: false,
+		    	width: 500,
+		    	modal: true
+		   });
+		  $( "#alumni_project_dialog" ).dialog({		 
+			  autoOpen: false,
+		    	width: 500,
+		    	modal: true
+		   });
+		  $( "#student_training_dialog" ).dialog({		 
+			  autoOpen: false,
+		    	width: 500,
+		    	modal: true
+		   });
+		  $( "#college_registration_1_dialog" ).dialog({		 
+			  autoOpen: false,
+		    	width: 500,
+		    	modal: true
+		   });		  
+		  $( "#college_registration_2_dialog" ).dialog({		 
+			  autoOpen: false,
+		    	width: 500,
+		    	modal: true
+		   });
+		  $( "#company_registration_1_dialog" ).dialog({		 
+			  autoOpen: false,
+		    	width: 500,
+		    	modal: true
+		   });
+		  $( "#institution_registration_1_dialog" ).dialog({		 
+			  autoOpen: false,
+		    	width: 500,
+		    	modal: true
+		   });	
+		  $( "#bank_registration_1_dialog" ).dialog({		 
+			  autoOpen: false,
+		    	width: 500,
+		    	modal: true
+		   });
+		  $( "#scholarship_registration_1_dialog" ).dialog({		 
+			  autoOpen: false,
+		    	width: 500,
+		    	modal: true
+		   });
+		  
+		  $( "#confirm_dialog" ).dialog({		 
+			  autoOpen: false,
+		    	width: 500,
+		    	modal: true
+		   });
+		 
+		   $(".ui-dialog-titlebar").hide();
+		   
+		   $( "#register_dialog_open" ).click(function() {
+			   	localStorage.setItem('userType', '0');
+				$( "#register_dialog" ).dialog( "open" );
+			});
+		   /* Mentor Dialog Box Open */
+		  /*  $( "#mentor_dialog_open" ).click(function() {
+			   	//localStorage.setItem('userType', '0');
+				$( "#mentor_dialog" ).dialog( "open" );
+			}); */
+		   /*  */
+		   
+		    /* validUser Dialog Box Open */
+		   $( "#validUser_dialog_open" ).click(function() {
+				$( "#validUser_dialog" ).dialog( "open" );
+			});
+		   $( "#fp_dialog_open" ).click(function() {
+				$( "#fp_dialog" ).dialog( "open" );
+			});
+		   $( "#special_register_dialog_open" ).click(function() {
+			   localStorage.setItem('userType', '3');
+				$( "#special_register_dialog" ).dialog( "open" );
+			});
+		   $( "#basic_details_dialog_open" ).click(function() {
+			   $( "#register_dialog" ).dialog( "close" );
+				$( "#basic_details_dialog" ).dialog( "open" );
+			});
+		  
+		  
+	  });
+	  
+	  $.widget( "ui.dialog", $.ui.dialog, {
+		  options: {
+		    clickOutside: false, // Determine if clicking outside the dialog shall close it
+		    clickOutsideTrigger: "" // Element (id or class) that triggers the dialog opening 
+		  },
+
+		  open: function() {
+		    var clickOutsideTriggerEl = $( this.options.clickOutsideTrigger );
+		    var that = this;
+		    
+		    if (this.options.clickOutside){
+		      // Add document wide click handler for the current dialog namespace
+		      $(document).on( "click.ui.dialogClickOutside" + that.eventNamespace, function(event){
+		        if ( $(event.target).closest($(clickOutsideTriggerEl)).length == 0 && $(event.target).closest($(that.uiDialog)).length == 0){
+		          that.close();
+		        }
+		      });
+		    }
+		    
+		    this._super(); // Invoke parent open method
+		  },
+		  
+		  close: function() {
+		    var that = this;
+		    
+		    // Remove document wide click handler for the current dialog
+		    $(document).off( "click.ui.dialogClickOutside" + that.eventNamespace );
+		    
+		    this._super(); // Invoke parent close method 
+		  },  
+
+		});
+	  
+	  $(function(){
+		    $('#date').combodate();
+		    $('#startcollegedate').combodate();    
+		    $('#endcollegedate').combodate();  
+		    $('#alumnistartcollegedate').combodate();    
+		    $('#alumniendcollegedate').combodate();  
+		    $('#startworkdate').combodate();  
+		    $('#endworkdate').combodate();
+		    $('#alumnistartworkdate').combodate();  
+		    $('#alumniendworkdate').combodate();
+		    $('#startprojectdate').combodate();  
+		    $('#endprojectdate').combodate();
+		    $('#alumnistartprojectdate').combodate();  
+		    $('#alumniendprojectdate').combodate();
+		    $('#starttrainingdate').combodate();  
+		    $('#endtrainingdate').combodate();
+		    $('#startschodate').combodate();  
+		    $('#endschodate').combodate();
+		    $('#facultystartworkdate').combodate();  
+		    $('#facultyendworkdate').combodate();
+		    $('#facultystartprojectdate').combodate();  
+		    $('#facultyendprojectdate').combodate();
+		}( jQuery ));
+	  
+	  function changeImage(id){
+		  
+		  if(id == '0'){
+			  localStorage.setItem('userType', '0');
+			  document.getElementById("student_image").src="img/student_on.png";
+			  document.getElementById("faculty_image").src="img/faculty_off.png";
+			  document.getElementById("alumni_image").src="img/alumni_off.png";
+		  }else if(id == '1'){
+			  localStorage.setItem('userType', '1');
+			  document.getElementById("student_image").src="img/student_off.png";
+			  document.getElementById("faculty_image").src="img/faculty_on.png";
+			  document.getElementById("alumni_image").src="img/alumni_off.png";
+		  }else if(id == '2'){
+			  localStorage.setItem('userType', '2');
+			  document.getElementById("student_image").src="img/student_off.png";
+			  document.getElementById("faculty_image").src="img/faculty_off.png";
+			  document.getElementById("alumni_image").src="img/alumni_on.png";
+		  }
+		  
+	  }
+	  
+	  function changeRegImage(id){
+		  if(id == '3'){
+			  localStorage.setItem('userType', '3');
+			  document.getElementById("college_reg_image").src="img/college_reg_on.png";
+			  document.getElementById("company_reg_image").src="img/company_reg_off.png";
+			  document.getElementById("institution_reg_image").src="img/institution_reg_off.png";
+			  document.getElementById("bank_reg_image").src="img/bank_reg_off.png";
+			  document.getElementById("scholarship_reg_image").src="img/scholarship_reg_off.png";
+		  }else if(id == '4'){
+			  localStorage.setItem('userType', '4');
+			  document.getElementById("college_reg_image").src="img/college_reg_off.png";
+			  document.getElementById("company_reg_image").src="img/company_reg_on.png";
+			  document.getElementById("institution_reg_image").src="img/institution_reg_off.png";
+			  document.getElementById("bank_reg_image").src="img/bank_reg_off.png";
+			  document.getElementById("scholarship_reg_image").src="img/scholarship_reg_off.png";
+		  }else if(id == '5'){
+			  localStorage.setItem('userType', '5');
+			  document.getElementById("college_reg_image").src="img/college_reg_off.png";
+			  document.getElementById("company_reg_image").src="img/company_reg_off.png";
+			  document.getElementById("institution_reg_image").src="img/institution_reg_on.png";
+			  document.getElementById("bank_reg_image").src="img/bank_reg_off.png";
+			  document.getElementById("scholarship_reg_image").src="img/scholarship_reg_off.png";
+		  }else if(id == '6'){
+			  localStorage.setItem('userType', '6');
+			  document.getElementById("college_reg_image").src="img/college_reg_off.png";
+			  document.getElementById("company_reg_image").src="img/company_reg_off.png";
+			  document.getElementById("institution_reg_image").src="img/institution_reg_off.png";
+			  document.getElementById("bank_reg_image").src="img/bank_reg_on.png";
+			  document.getElementById("scholarship_reg_image").src="img/scholarship_reg_off.png";
+		  }else if(id == '7'){
+			  localStorage.setItem('userType', '7');
+			  document.getElementById("college_reg_image").src="img/college_reg_off.png";
+			  document.getElementById("company_reg_image").src="img/company_reg_off.png";
+			  document.getElementById("institution_reg_image").src="img/institution_reg_off.png";
+			  document.getElementById("bank_reg_image").src="img/bank_reg_off.png";
+			  document.getElementById("scholarship_reg_image").src="img/scholarship_reg_on.png";
+		  }
+	  }
+	  
+	  var genderImage = '0';
+	  
+	  function changeGenderImage(id){
+		  genderImage = id;
+		  if(id == '0'){
+			  document.getElementById("male_image").src="img/male_on.png";
+			  document.getElementById("female_image").src="img/female_off.png";
+		  }else if(id == '1'){
+			  document.getElementById("male_image").src="img/male_off.png";
+			  document.getElementById("female_image").src="img/female_on.png";
+		  }
+	  }
+	  
+	  function skip(){
+		  $( "#confirm_dialog" ).dialog("close");
+		  window.location.href="landing.html"
+	  }
+	  function next(){
+		  $( "#confirm_dialog" ).dialog("close");
+		  $( "#basic_details_dialog" ).dialog("open");
+	  } 
+	  
+	 /*  function mentor1(){
+		  $( "#mentor_dialog" ).dialog("close");
+		  window.location.href="landing.html"
+	  }
+	  function chooseMentor(){
+		  $( "#mentor_dialog" ).dialog("close");
+		  window.location.href="mentorrelationship.html"
+	  } */
+	  function invalidUsername(){
+		  $( "#validUser_dialog" ).dialog("close");
+	  }
+
+</script>
+
+</body>
+</html>
